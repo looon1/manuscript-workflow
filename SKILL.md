@@ -44,6 +44,8 @@ Do not bake one project's hard boundaries into this generic skill. Project-speci
 
 If a project profile exists, read it before drafting or auditing.
 
+If the user is starting a reusable project workflow and no profile exists, create a concise profile from `references/artifact_templates.md` before drafting.
+
 ## Routing
 
 Choose the lightest workflow that satisfies the request.
@@ -68,6 +70,7 @@ For substantial work, write artifacts under:
 
 Recommended artifact set:
 
+- `manuscript_workflow_project_profile.md`: reusable per-project definitions and evidence boundaries
 - `material_passport.md`: source inventory, authority level, freshness, access gaps
 - `external_pattern_synthesis.md`: what was learned from exemplars or other skills
 - `motivation_options.md` or `confirmed_motivation.md`
@@ -79,6 +82,8 @@ Recommended artifact set:
 - final `.tex` and compiled `.pdf` when requested
 
 For small requests, create only the artifacts needed.
+
+When creating several artifacts at once, read `references/artifact_templates.md` and use only the relevant sections.
 
 ## Workflow
 
@@ -265,9 +270,8 @@ Before final answer, verify:
 
 Use specialized skills as subordinate helpers when useful:
 
-- `academic-paper`: citation style, abstract, final formatting
-- `academic-paper-reviewer`: multi-perspective critique
-- `paper-spine`: exemplar-driven motivation and rationale-matrix discipline
-- `scientific-manuscript`: biomedical journal norms and statistical reporting
+- `academic-paper`, if installed: citation style, abstract, final formatting
+- `academic-paper-reviewer`, if installed: multi-perspective critique
+- external skills, reference papers, or journal examples: process and style learning only, following `references/external_pattern_synthesis.md`
 
 If another skill conflicts with this one, `manuscript-workflow` controls evidence boundaries, claim strength, and project-specific definitions. Other skills may influence style, format, or review perspectives only.

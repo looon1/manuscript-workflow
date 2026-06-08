@@ -12,6 +12,7 @@ Core files:
 
 - `SKILL.md`: routing and workflow controller
 - `references/manuscript_quality_contract.md`: section-level writing and audit rules
+- `references/artifact_templates.md`: lightweight templates for project profile and workflow artifacts
 - `references/external_pattern_synthesis.md`: clean adaptation rules for learning from external skills or reference papers
 - `ATTRIBUTION.md`: source inspiration and license boundary notes
 
