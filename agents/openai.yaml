@@ -1,7 +1,7 @@
 interface:
   display_name: "Manuscript Workflow"
-  short_description: "Evidence-first scientific manuscript workflow"
-  default_prompt: "Use $manuscript-workflow to build or audit a journal-style manuscript from my local results and reference papers."
+  short_description: "Evidence-first manuscript drafting and audit"
+  default_prompt: "Use $manuscript-workflow to build, audit, rewrite, or package a journal-style manuscript from my local results and reference exemplars."
 
 policy:
   allow_implicit_invocation: true

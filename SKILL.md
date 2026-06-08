@@ -1,91 +1,176 @@
 ---
 name: manuscript-workflow
-description: Build, audit, and draft journal-style scientific manuscripts from local materials, user results, and optional exemplar papers. Use when the user asks to write a manuscript, construct a paper mainline, follow a reference paper's writing pattern, generate Chinese or English LaTeX, review Results or Discussion logic, or iteratively improve a reusable manuscript workflow.
+description: Build, audit, rewrite, and package journal-style scientific manuscripts from local materials, user results, and optional exemplar papers. Use when the user asks to write a manuscript, construct a paper mainline, follow or learn from reference papers or other writing skills, generate Chinese or English LaTeX/PDF, review Results or Discussion logic, run a reviewer-style critique, or iteratively improve a reusable manuscript workflow.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   status: local
+  upstream_inspiration:
+    - PaperSpine
+    - academic-research-skills
 ---
 
 # Manuscript Workflow
 
-Use this skill for manuscript construction when the user gives broad instructions such as "根据参考文献和我的结果帮我写一篇论文", "帮我构建论文主线", "写成中文 LaTeX", "审计 Results/Discussion", or explicitly invokes `$manuscript-workflow`.
+Use this skill when the user gives a broad writing request such as "根据参考文献和我的结果帮我写一篇论文", "帮我构建论文主线", "写成中文 LaTeX", "审计 Results/Discussion", or explicitly invokes `$manuscript-workflow`.
 
-This skill is a workflow controller. It can borrow useful constraints from paper-writing, review, citation, LaTeX, and domain skills, but it must keep the user's evidence and project-specific rules as the source of truth.
+This skill is an evidence-first manuscript controller. It may learn workflow patterns from strong skills, paper examples, journal instructions, and prior project artifacts, but the manuscript's factual content must come from the user's materials and verified sources.
 
-## Core Rule
+## Design Boundary
 
-Do not turn a generic prompt into generic prose. First convert the request into a manuscript-specific evidence workflow:
+This workflow is an original local packaging layer. It was designed after studying public manuscript-writing workflows, especially motivation-led paper construction, staged academic writing pipelines, claim verification, reviewer-style critique, and LaTeX packaging. Do not copy upstream wording or file contents into user deliverables. Extract transferable process patterns and restate them in the current project's own terms.
 
-1. What is the controlling motivation?
-2. What local evidence supports each claim?
-3. What is only style learned from exemplars?
-4. What must be stopped, downgraded, or marked as missing?
-5. What final artifact did the user ask for: audit, outline, Markdown, LaTeX, PDF, DOCX, response letter, or revision plan?
+For source and license notes, read `references/external_pattern_synthesis.md` and `ATTRIBUTION.md` when updating this skill or publishing it.
 
-Never fabricate data, metrics, p-values, cohorts, citations, figure content, sample sizes, methods, or validation experiments.
+## Core Principle
 
-## Scope
+Do not turn a generic prompt into generic prose. Convert the request into a traceable manuscript workflow:
 
-This is a generic manuscript workflow. Do not bake a single project's hard boundaries into the skill. Project-specific definitions, forbidden claims, preferred terms, evidence quirks, and stop rules belong in the current conversation, local materials, or a per-project profile file.
+1. Define the paper's controlling motivation.
+2. Build a material passport from local files, references, figures, and drafts.
+3. Separate evidence, style learning, and missing data.
+4. Register every major claim with allowed wording.
+5. Draft section-by-section from the claim register.
+6. Run an audit before final packaging.
 
-If the working directory contains any of these files, read the most relevant one before drafting:
+Never fabricate data, metrics, p-values, cohorts, citations, figures, methods, validation experiments, or biological mechanisms.
+
+## Generic Skill, Project-Specific Profile
+
+Do not bake one project's hard boundaries into this generic skill. Project-specific definitions, forbidden claims, preferred terms, evidence quirks, and stop rules belong in:
 
 - `manuscript_workflow_project_profile.md`
 - `paper_rewriting_output/manuscript_workflow_project_profile.md`
-- `paper_rewriting_output/claim_register.md`
-- `paper_rewriting_output/evidence_bank.md`
-- `paper_rewriting_output/writing_rationale_matrix.md`
-- `paper_rewriting_output/source_map.md`
+- a user message in the current conversation
 
-## Required Workflow
+If a project profile exists, read it before drafting or auditing.
 
-### 1. Intake and Assumptions
+## Routing
 
-State concise assumptions before writing or editing:
+Choose the lightest workflow that satisfies the request.
+
+| User request | Route |
+|---|---|
+| "What is the story/mainline?" | `audit-mainline` |
+| "Write a full paper from these materials" | `build-from-materials` |
+| "Rewrite this draft using my results/reference paper" | `rewrite-existing` |
+| "Only Results/Discussion" | `section-draft` |
+| "Review this manuscript" | `review-gate` |
+| "Make LaTeX/PDF/DOCX" | `final-package` |
+| "Improve the workflow/skill" | `workflow-update` |
+
+For unclear requests, state assumptions and proceed when the missing answer would not change the route. Ask only when the manuscript direction, output format, or evidence boundary would change.
+
+## Standard Artifacts
+
+For substantial work, write artifacts under:
+
+`paper_rewriting_output/manuscript_workflow/`
+
+Recommended artifact set:
+
+- `material_passport.md`: source inventory, authority level, freshness, access gaps
+- `external_pattern_synthesis.md`: what was learned from exemplars or other skills
+- `motivation_options.md` or `confirmed_motivation.md`
+- `evidence_map.md`
+- `claim_register.md`
+- `section_blueprint.md`
+- `writing_rationale_matrix.md`
+- `draft_audit.md`
+- final `.tex` and compiled `.pdf` when requested
+
+For small requests, create only the artifacts needed.
+
+## Workflow
+
+### 1. Intake
+
+Record concise assumptions:
 
 - target type: journal, conference, report, review, thesis chapter, letter
-- language and output format
-- whether literature/citations are required now
-- whether exemplar papers are for style only or factual support
-- whether the task is draft, audit, rewrite, or final packaging
+- output language
+- output format
+- whether citations are required now
+- whether reference papers teach style only or support factual claims
+- whether the task is build, rewrite, audit, review, or package
 
-Ask only when a missing answer would change the manuscript direction. Otherwise proceed and record the assumption.
+### 2. Material Passport
 
-### 2. Evidence Inventory
+Inspect local materials before drafting. Prefer summaries, result tables, figure manifests, claim registers, and method logs over raw large objects.
 
-Inspect local materials before drafting. Prefer existing result summaries, figure maps, claim registers, tables, and method logs over reading raw large objects.
+Classify each source:
 
-Create or update a compact evidence map in the output directory when the task is substantial:
+| Level | Meaning |
+|---|---|
+| `authoritative_local` | current user-approved results or project profile |
+| `supporting_local` | scripts, manifests, figures, older summaries |
+| `external_evidence` | cited literature or public datasets |
+| `style_exemplar` | paper or skill used for structure/rhetoric only |
+| `historical_or_stale` | older project outputs that require re-audit |
+| `missing_or_conflict` | must stop, downgrade, or define a rerun |
 
-| Claim | Evidence file or source | Exact numbers or figure | Evidence level | Allowed wording |
+If two materials disagree, do not smooth over the conflict. Write the values, affected sections, safest wording, and needed rerun.
+
+### 3. Motivation Thread
+
+Choose one controlling motivation before drafting. A paper should not read like a folder inventory.
+
+If the motivation is unclear, produce 2-4 real options. Each option must change the paper's title, Introduction gap, Results order, or Discussion interpretation. Stop for user selection when the options would lead to different papers.
+
+When motivation is clear, write `confirmed_motivation.md` with:
+
+- one-sentence red thread
+- field problem
+- specific gap
+- design response
+- primary evidence
+- prioritized claims
+- claims to avoid
+- section consequences
+
+### 4. Evidence Map And Claim Register
+
+Create an evidence map:
+
+| Claim | Evidence source | Exact numbers or figure | Evidence level | Allowed wording |
 |---|---|---|---|---|
 
 Evidence levels:
 
-- `established_local`: directly supported by local results
-- `supported_external`: supported by external validation or citation
-- `exploratory_local`: computational or discovery-only support
-- `hypothesis`: mechanism or translation direction not experimentally proven
-- `missing_or_conflict`: stop, ask, rerun, or explicitly mark as limitation
+- `established_local`
+- `supported_external`
+- `exploratory_local`
+- `hypothesis`
+- `missing_or_conflict`
 
-### 3. Motivation and Claim Register
+Then create a claim register:
 
-Choose one controlling motivation. A manuscript should not read like a list of analyses.
-
-Write a claim register before the full draft:
-
-- primary claim: one sentence
-- secondary claims: 3 to 6
+- primary claim
+- 3-6 secondary claims
 - forbidden or downgraded claims
-- terminology definitions that must stay consistent
+- terminology definitions
 - figure-to-claim mapping
-- evidence gaps and stop rules
+- stop rules
 
 If a claim lacks evidence, downgrade the verb instead of strengthening the prose.
 
-### 4. Section Blueprint
+### 5. External Pattern Learning
 
-Draft the manuscript row by row before writing full prose. Use journal-like structure unless the user asks otherwise:
+When the user asks to follow a paper or existing skill, learn process patterns rather than copying text:
+
+- target-scene structure
+- intake and checkpoint design
+- section order
+- paragraph jobs
+- figure logic
+- audit gates
+- output packaging
+- failure modes
+
+Write the learned pattern in the current project's vocabulary. Do not reproduce upstream templates unless license and attribution explicitly allow it and the user wants vendored content.
+
+### 6. Section Blueprint
+
+Create section-level blueprints before full prose:
 
 - Title
 - Abstract
@@ -97,87 +182,92 @@ Draft the manuscript row by row before writing full prose. Use journal-like stru
 - Author Contributions
 - Conflicts of Interest
 - Acknowledgements
-- References or reference placeholders
+- References or placeholders
 - Supplementary Notes when needed
 
-Results should usually follow the figure order. Each Results subsection should carry one evidence action:
+Each Results subsection should carry one evidence action:
 
 1. lead finding
-2. cohort or input
+2. data or cohort
 3. method in one short phrase
 4. exact quantitative result
 5. figure pointer
-6. boundary sentence if the claim is exploratory
+6. interpretation boundary
 
-### 5. Drafting Standards
+Use `references/manuscript_quality_contract.md` for section-level standards.
+
+### 7. Draft
 
 For Results:
 
 - lead with findings, not methods
-- report exact sample sizes, effect sizes, p-values, and model metrics when available
-- keep figure references in order
-- avoid causal language for correlation, enrichment, CellChat/NicheNet, SCENIC, trajectory, drug prediction, or machine-learning signatures unless causal evidence exists
-- separate cell type, cell state, gene program, signature, model, and mechanism
+- report exact sample sizes, effect sizes, p-values, overlaps, or model metrics when available
+- keep figures in order
+- separate cell type, state, gene programme, signature, model, mechanism, and drug hypothesis
+- avoid causal verbs unless causal evidence exists
 
 For Discussion:
 
-- paragraph 1: restate the main finding and evidence ladder
-- paragraph 2 to 4: interpret biological or theoretical meaning, comparing with literature only when citations are being handled
-- paragraph 5: translational or practical implications
-- paragraph 6: limitations tied to specific evidence weak points
-- final paragraph: precise conclusion and next validation steps
+- answer the Introduction promise
+- interpret the evidence ladder
+- compare with literature only when citations are being handled
+- name specific limitations tied to evidence gaps
+- close with testable next steps
 
 For Methods:
 
-- make analysis reproducible at the level supported by local materials
-- include software versions and thresholds only when known
-- if details are unavailable, write a placeholder rather than inventing them
+- describe only documented procedures
+- include versions and thresholds only when known
+- use `[to be added]` placeholders instead of inventing details
 
-For reference papers:
+### 8. Review Gate
 
-- learn structure, figure logic, rhetoric, and section rhythm
-- do not import their biology, numbers, or citations as if they were user results
-- cite them only when the user requests references or when background claims need support
+Before final packaging, run a compact reviewer-style audit. Use at least these roles:
 
-### 6. Audit Before Final
+- Method reviewer: design, denominators, statistics, leakage, reproducibility
+- Domain reviewer: biological or field interpretation, terminology, literature fit
+- Argument reviewer: motivation, Results order, Discussion closure
+- Skeptical reviewer: strongest counterclaim, overreach, missing validation
 
-Before final delivery, audit the draft against:
+Synthesize findings into:
 
-- every numerical claim has a source
-- no project-specific term is mixed with a different level of biology or analysis
-- no validation claim exceeds the actual design
-- no mechanistic claim exceeds computational inference
-- every figure caption says what the figure proves and what it does not prove
-- Discussion limitations match the weakest Results claims
-- output format compiles or opens when feasible
+- blocking issues
+- major revisions
+- minor revisions
+- safe-to-proceed notes
 
-For detailed audit phrasing and section-level constraints, read `references/manuscript_quality_contract.md` when writing a full manuscript, Results, Discussion, or LaTeX output.
+Do not edit the manuscript during review unless the user asks for revision.
 
-## Output Conventions
+### 9. Final Package
 
-Default output folder for substantial work:
+For LaTeX:
 
-`paper_rewriting_output/manuscript_workflow/`
-
-For LaTeX drafts:
-
-- use a new filename unless the user explicitly asks to overwrite
+- create a new filename unless overwrite is explicit
 - compile PDF when a TeX engine is available
 - keep prior drafts intact
-- report both `.tex` and `.pdf` paths
+- report `.tex`, `.pdf`, and audit paths
 
-For iterative improvement:
+For DOCX or other formats, use available local tooling and verify the output opens or exists.
 
-- record what failed in the previous output
-- update the per-project profile or claim register, not the generic skill, unless the user explicitly asks to change the skill
+## Audit Checklist
+
+Before final answer, verify:
+
+- every numerical claim has a source
+- every figure caption states what the figure supports and what it does not prove
+- external papers or skills are not used as evidence for local results
+- validation language matches study design
+- mechanisms are not stronger than the data
+- unresolved conflicts are in limitations or a stop-rule note
+- final artifact exists and compiles when feasible
 
 ## Compatibility With Other Skills
 
-Use specialized skills as subordinate helpers when available:
+Use specialized skills as subordinate helpers when useful:
 
-- `academic-paper`: formatting, abstract, citation style, output packaging
-- `academic-paper-reviewer`: adversarial review and revision roadmap
-- `paper-spine`: exemplar-driven paper structure and source-map discipline
-- `scientific-manuscript`: biomedical journal section norms and statistical reporting
+- `academic-paper`: citation style, abstract, final formatting
+- `academic-paper-reviewer`: multi-perspective critique
+- `paper-spine`: exemplar-driven motivation and rationale-matrix discipline
+- `scientific-manuscript`: biomedical journal norms and statistical reporting
 
-If another skill conflicts with this one, manuscript-workflow controls evidence boundaries, claim strength, and project-specific definitions. The other skill may influence format and style only.
+If another skill conflicts with this one, `manuscript-workflow` controls evidence boundaries, claim strength, and project-specific definitions. Other skills may influence style, format, or review perspectives only.

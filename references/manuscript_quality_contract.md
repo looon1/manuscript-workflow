@@ -111,6 +111,71 @@ Include when known:
 
 If a detail is missing, write a placeholder such as `[software version to be added]` rather than guessing.
 
+## Material Grounding Contract
+
+Separate three channels during writing:
+
+| Channel | Allowed use |
+|---|---|
+| user materials | factual claims, methods, figures, numbers, cohort descriptions |
+| cited literature | background, comparison, external support, conceptual framing |
+| style exemplars or skills | section rhythm, paragraph jobs, review gates, packaging habits |
+
+Never let the style channel introduce a result, mechanism, dataset, p-value, cohort, figure, or conclusion. If a fact is absent from the user materials and not explicitly supported by a cited source, mark it as `[material gap]`.
+
+## Claim Verification Gate
+
+Before final drafting or revision, classify each important claim:
+
+| Verdict | Meaning | Action |
+|---|---|---|
+| verified | directly supported by a local file or cited source | keep with exact value or figure pointer |
+| supported but weak | supported by exploratory or indirect evidence | keep with calibrated verbs |
+| conflict | two sources disagree | stop, name the conflict, and use safest wording only if useful |
+| unsupported | no traceable source | remove, downgrade to hypothesis, or mark as missing |
+
+Claims that usually need explicit verification:
+
+- sample, cell, subject, cohort, or dataset counts
+- p-values, FDR, AUC, odds ratio, fold change, overlap size, gene count
+- cell-type identity versus cell-state interpretation
+- causal or mechanistic verbs
+- validation, replication, independence, or clinical-utility language
+- figure panel references
+
+## Reviewer Gate
+
+Use this gate for full drafts, Results, Discussion, and final LaTeX packages.
+
+Report findings in this order:
+
+1. Blocking issues: unsupported central claims, wrong denominators, leakage, missing key result, or contradictory evidence.
+2. Major revisions: weak motivation, confusing Results order, overstrong Discussion, missing methods detail, or figure-text mismatch.
+3. Minor revisions: wording, paragraph order, repeated claims, terminology consistency.
+4. Safe-to-proceed notes: what is already coherent and can be preserved.
+
+Reviewer roles:
+
+- Method: design, denominators, statistics, reproducibility, leakage.
+- Domain: biological or field interpretation, terminology, literature fit.
+- Argument: Introduction promise, Results order, Discussion closure.
+- Skeptical: strongest counterclaim, overreach, missing validation.
+
+## Writing Quality Sweep
+
+After evidence review, improve readability without adding facts.
+
+Check:
+
+- one paragraph does one job
+- topic sentence carries the claim, not the method name
+- repeated terms are consistent across title, abstract, Results, figures, and Discussion
+- Results uses concrete evidence before interpretation
+- Discussion interprets rather than re-listing results
+- placeholders are visible and searchable
+- no generic filler such as "this study provides new insights" unless followed by a specific claim
+- no rhetorical escalation from "associated with" in Results to "drives" in Discussion
+
 ## Evidence Conflict Handling
 
 Stop or mark explicitly when:
